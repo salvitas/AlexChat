@@ -1,0 +1,13 @@
+{
+  "name": "alex-chat",
+  "version": "0.0.1",
+  "description": "A simple chat PoC for Alex",
+  "main": "app.js",
+  "author": "Salva Vilarrasa",
+  "private": true,
+  "license": "BSD",
+  "dependencies": {
+    "express": "3.4.8",
+	"socket.io" : "0.9.*"
+  }
+}

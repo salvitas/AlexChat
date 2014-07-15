@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Alex Chat</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <ul class="pages">
+    <li class="login page">
+      <div class="form">
+        <h3 class="title">Enter mobile phone:</h3>
+        <input class="usernameInput" type="text" maxlength="14" />
+      </div>
+    </li>
+	<li class="contacts page">
+      <div class="contactsArea">
+		<p>Contacts</p>
+		<hr />
+        <ul class="contacts"></ul>
+		<p>Groups</p>
+		<hr />
+		<ul class="groups"></ul>
+      </div>
+      <div class="actionBar">
+		<button id="createGroupBtn" type="button">+</button>
+	  </div>
+    </li>
+    <li class="chat page">
+      <div class="chatArea">
+        <ul class="messages"></ul>
+      </div>
+      <input class="inputMessage" placeholder="Type here..."/>
+    </li>
+  </ul>
+
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
