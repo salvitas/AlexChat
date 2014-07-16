@@ -52,7 +52,7 @@ $(function() {
     username = cleanInput($usernameInput.val().trim());
 
 	// Tell the server your username
-	socket.emit('add user', username);
+	socket.emit('user:add', username);
   }
   
   function showChatWindow() {
@@ -88,7 +88,7 @@ $(function() {
         message: message
       });
       // tell server to execute 'new message' and send along one parameter
-      socket.emit('new message', message);
+      socket.emit('message:new', message);
     }
   }
 
@@ -194,7 +194,7 @@ $(function() {
     if (connected) {
       if (!typing) {
         typing = true;
-        socket.emit('typing');
+        socket.emit('typing:start');
       }
       lastTypingTime = (new Date()).getTime();
 
@@ -202,7 +202,7 @@ $(function() {
         var typingTimer = (new Date()).getTime();
         var timeDiff = typingTimer - lastTypingTime;
         if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-          socket.emit('stop typing');
+          socket.emit('typing:stop');
           typing = false;
         }
       }, TYPING_TIMER_LENGTH);
@@ -239,7 +239,7 @@ $(function() {
     if (event.which === 13) {
       if (username) {
         sendMessage();
-        socket.emit('stop typing');
+        socket.emit('typing:stop');
         typing = false;
       } else {
         setUsername();
@@ -280,7 +280,7 @@ $(function() {
   socket.on('login', function (data) {
     connected = true;
 	showContactsWindow();
-	socket.emit('send contacts', {contacts: contactList[username]});
+	socket.emit('contacts:send', {contacts: contactList[username]});
 	//showChatWindow();
     // Display the welcome message
     //var message = "Welcome to Alex Chat ";
@@ -289,19 +289,19 @@ $(function() {
   });
 
   // Whenever the server emits 'new message', update the chat body
-  socket.on('new message', function (data) {
+  socket.on('message:new', function (data) {
     addChatMessage(data);
   });
 
   // Whenever the server emits 'user joined', log it in the chat body
-  socket.on('user joined', function (data) {
+  socket.on('user:joined', function (data) {
     log(data.username + ' joined');
 	updateOnlineContactList(data.username);
     addParticipantsMessage(data);
   });
 
   // Whenever the server emits 'user left', log it in the chat body
-  socket.on('user left', function (data) {
+  socket.on('user:left', function (data) {
     log(data.username + ' left');
 	updateOfflineContactList(data.username);
     addParticipantsMessage(data);
@@ -309,19 +309,19 @@ $(function() {
   });
 
   // Whenever ther server emits 'online contacts', we color in green our online contacts list.
-  socket.on('online contacts', function(data) {
+  socket.on('contacts:online', function(data) {
 	for(var c in data) {
 		$('li#'+data[c]).css({'color':'green', 'font-weight':'bold'});
 	}
   });
   
   // Whenever the server emits 'typing', show the typing message
-  socket.on('typing', function (data) {
+  socket.on('typing:start', function (data) {
     addChatTyping(data);
   });
 
   // Whenever the server emits 'stop typing', kill the typing message
-  socket.on('stop typing', function (data) {
+  socket.on('typing:stop', function (data) {
     removeChatTyping(data);
   });
 });

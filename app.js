@@ -25,9 +25,9 @@ io.on('connection', function (socket) {
   var addedUser = false;
 
   // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
+  socket.on('message:new', function (data) {
     // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
+    socket.broadcast.emit('message:new', {
       username: socket.username,
       message: data
     });
@@ -47,7 +47,7 @@ io.on('connection', function (socket) {
   });
   
   // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (username) {
+  socket.on('user:add', function (username) {
     // we store the username in the socket session for this client
     socket.username = username;
 
@@ -75,7 +75,7 @@ io.on('connection', function (socket) {
 		  numUsers: numUsers
 		});
 		// echo globally (all clients) that a person has connected
-		socket.broadcast.emit('user joined', {
+		socket.broadcast.emit('user:joined', {
 		  username: socket.username,
 		  numUsers: numUsers
 		});
@@ -85,7 +85,7 @@ io.on('connection', function (socket) {
   });
 
   // when the client emits his contact list
-  socket.on('send contacts', function (userContactList) {
+  socket.on('contacts:send', function (userContactList) {
 	if(userContactList) {
 		var onlineContacts = [];
 		for(var c in userContactList.contacts) {
@@ -96,20 +96,20 @@ io.on('connection', function (socket) {
 				console.log('contact : ' + userContactList.contacts[c] + ' isonline : false');
 			}
 		}
-		socket.emit('online contacts', onlineContacts);
+		socket.emit('contacts:online', onlineContacts);
 	}
   });
   
   // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
+  socket.on('typing:start', function () {
+    socket.broadcast.emit('typing:start', {
       username: socket.username
     });
   });
 
   // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
+  socket.on('typing:stop', function () {
+    socket.broadcast.emit('typing:stop', {
       username: socket.username
     });
   });
@@ -122,7 +122,7 @@ io.on('connection', function (socket) {
       --numUsers;
 
       // echo globally that this client has left
-      socket.broadcast.emit('user left', {
+      socket.broadcast.emit('user:left', {
         username: socket.username,
         numUsers: numUsers
       });
