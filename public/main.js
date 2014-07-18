@@ -25,7 +25,7 @@ $(function() {
   var $currentInput = $usernameInput.focus();
   var contactList = {'680859498': ['693770103', '693770107','693770108','693770109'], '693770107': ['693770101','693770102','693770103']};
 
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect('http://sharechat.herokuapp.com/');
 
   
   function createGroup() {
